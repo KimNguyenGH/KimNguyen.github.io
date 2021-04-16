@@ -1,7 +1,7 @@
 name: "Kim Nguyen's Website"
 output_dir: "."
 navbar:
-  title: "Kim H. Nguyen"
+  title: "Kim Kim Hằng Nguyễn"
   left:
     - text: "Home"
       href: index.html
