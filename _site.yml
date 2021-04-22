@@ -9,7 +9,8 @@ navbar:
       href: project.html
     - text: "About"
       href: about.html
-
+    -text: "516 Homework"
+     href: homework.html
 output:
   html_document:
     theme: cosmo
