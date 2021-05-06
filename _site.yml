@@ -9,8 +9,10 @@ navbar:
       href: project.html
     - text: "About"
       href: about.html
-    - text: "516 Homework"
-      href: homework.html
+    - text: "516: Homework 9"
+      href: homework9.html
+    - text: "516: Homework 10"
+      href: homework10.html
 output:
   html_document:
     theme: cosmo
