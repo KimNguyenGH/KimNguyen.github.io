@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Kim Nguyen" />
+
+
+<title>Homework 10 - Network Analysis</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Kim Hằng Nguyễn</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="project.html">Project</a>
+</li>
+<li>
+  <a href="homework9.html">516: Homework 9</a>
+</li>
+<li>
+  <a href="homework10.html">516: Homework 10</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Homework 10 - Network Analysis</h1>
+<h4 class="author">Kim Nguyen</h4>
+<h4 class="date">4/27/2021</h4>
+
+</div>
+
+
+<p>In this analysis, we looked at the network of the cohort of people in <em>BDS 516: Data Science and Quantitative Modeling</em>, a graduate course taught by Alex Shpenev at the University of Pennsylvania. The data that we use in this analysis were obtained from the survey that students in BDS516 took.</p>
+<pre class="r"><code># Load packages and an xls file
+library(readxl)
+library(network)</code></pre>
+<pre><code>## network: Classes for Relational Data
+## Version 1.16.1 created on 2020-10-06.
+## copyright (c) 2005, Carter T. Butts, University of California-Irvine
+##                     Mark S. Handcock, University of California -- Los Angeles
+##                     David R. Hunter, Penn State University
+##                     Martina Morris, University of Washington
+##                     Skye Bender-deMoll, University of Washington
+##  For citation information, type citation(&quot;network&quot;).
+##  Type help(&quot;network-package&quot;) to get started.</code></pre>
+<pre class="r"><code>library(igraph) </code></pre>
+<pre><code>## 
+## Attaching package: &#39;igraph&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:network&#39;:
+## 
+##     %c%, %s%, add.edges, add.vertices, delete.edges, delete.vertices,
+##     get.edge.attribute, get.edges, get.vertex.attribute, is.bipartite,
+##     is.directed, list.edge.attributes, list.vertex.attributes,
+##     set.edge.attribute, set.vertex.attribute</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     decompose, spectrum</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     union</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.2
+## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::as_data_frame() masks tibble::as_data_frame(), igraph::as_data_frame()
+## x purrr::compose()       masks igraph::compose()
+## x tidyr::crossing()      masks igraph::crossing()
+## x dplyr::filter()        masks stats::filter()
+## x dplyr::groups()        masks igraph::groups()
+## x dplyr::lag()           masks stats::lag()
+## x purrr::simplify()      masks igraph::simplify()</code></pre>
+<pre class="r"><code>hw10&lt;- read_excel(&quot;hw10.xlsx&quot;)
+node&lt;- read_excel(&quot;hw10.xlsx&quot;, skip = 1)
+colnames(node) &lt;- c(&quot;ID&quot;, 1:40, &quot;trait&quot;) 
+# Does node have a correct format. I&#39;m not sure how it suppose to be</code></pre>
+<div id="prepare-the-data-for-the-network-analysis-create-a-separate-edge-and-node-list" class="section level4">
+<h4><strong>1. Prepare the data for the network analysis (create a separate edge and node list)</strong></h4>
+<pre class="r"><code>#create the edge list
+edge_prep &lt;- node %&gt;% pivot_longer(col = -c(ID, trait), names_to = &quot;in-tie&quot;, values_to = &quot;value&quot;) %&gt;% 
+  rename (`out-tie` = ID) 
+  
+edgelist &lt;- separate_rows(edge_prep, value, sep =&quot;,&quot;) %&gt;% select(!trait) %&gt;% 
+  rename (`tie-type` = value)
+as.character(edgelist$`tie-type`)</code></pre>
+<pre><code>##    [1] NA  NA  NA  NA  NA  NA  NA  &quot;4&quot; NA  &quot;4&quot; &quot;1&quot; NA  NA  NA  NA  NA  NA  &quot;1&quot;
+##   [19] &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;4&quot; NA  NA  NA  NA  NA  NA  NA  &quot;4&quot;
+##   [37] NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA 
+##   [55] NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 
+##   [73] NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  &quot;2&quot;
+##   [91] &quot;1&quot; NA  &quot;1&quot; NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA 
+##  [109] NA  &quot;1&quot; &quot;5&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  &quot;1&quot; &quot;3&quot; &quot;4&quot;
+##  [127] &quot;5&quot; NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 
+##  [145] NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; NA  NA  NA  &quot;1&quot;
+##  [163] &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; NA  NA  NA  NA  NA  &quot;1&quot;
+##  [181] &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; NA  NA  NA  NA  NA  NA  &quot;2&quot; &quot;2&quot; &quot;3&quot; &quot;1&quot; &quot;2&quot;
+##  [199] &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot;
+##  [217] &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 
+##  [235] &quot;3&quot; NA  NA  &quot;3&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  &quot;3&quot; NA 
+##  [253] NA  NA  &quot;3&quot; NA  NA  NA  NA  NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;1&quot; NA  NA  &quot;2&quot; NA 
+##  [271] &quot;4&quot; NA  NA  NA  NA  &quot;1&quot; NA  &quot;1&quot; &quot;1&quot; NA  &quot;1&quot; &quot;2&quot; &quot;1&quot; NA  &quot;4&quot; NA  NA  NA 
+##  [289] NA  NA  NA  &quot;2&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot; NA  &quot;2&quot; NA  NA  NA  &quot;2&quot; NA  NA  NA  NA  NA 
+##  [307] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;5&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;
+##  [325] &quot;5&quot; &quot;4&quot; &quot;4&quot; NA  &quot;4&quot; NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;3&quot; NA 
+##  [343] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;3&quot; &quot;4&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;2&quot; &quot;3&quot;
+##  [361] NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot; NA  &quot;1&quot; &quot;2&quot;
+##  [379] &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;2&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; NA  NA  NA 
+##  [397] NA  NA  NA  NA  NA  NA  NA  NA  &quot;4&quot; NA  &quot;4&quot; NA  &quot;1&quot; NA  NA  &quot;1&quot; &quot;3&quot; NA 
+##  [415] NA  NA  NA  NA  &quot;4&quot; NA  NA  NA  NA  NA  NA  &quot;1&quot; &quot;4&quot; &quot;5&quot; &quot;4&quot; NA  NA  NA 
+##  [433] &quot;1&quot; &quot;4&quot; &quot;5&quot; NA  &quot;5&quot; &quot;4&quot; NA  NA  NA  NA  &quot;5&quot; NA  NA  NA  NA  NA  NA  &quot;4&quot;
+##  [451] NA  NA  NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA 
+##  [469] NA  &quot;4&quot; &quot;1&quot; &quot;5&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;3&quot;
+##  [487] &quot;4&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA 
+##  [505] NA  NA  NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  &quot;2&quot;
+##  [523] &quot;3&quot; &quot;4&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;2&quot;
+##  [541] &quot;3&quot; NA  &quot;2&quot; &quot;5&quot; NA  NA  NA  NA  &quot;5&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;
+##  [559] &quot;5&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  &quot;2&quot; &quot;3&quot; NA  &quot;2&quot;
+##  [577] &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;2&quot; NA  NA  NA  &quot;2&quot; NA  &quot;2&quot; &quot;4&quot;
+##  [595] &quot;2&quot; &quot;2&quot; &quot;4&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;4&quot; NA  &quot;2&quot; &quot;1&quot; &quot;2&quot; &quot;2&quot; NA  &quot;2&quot; &quot;2&quot; &quot;4&quot; &quot;2&quot;
+##  [613] &quot;3&quot; &quot;4&quot; &quot;2&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;4&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;
+##  [631] NA  &quot;2&quot; &quot;2&quot; &quot;2&quot; &quot;2&quot; &quot;2&quot; &quot;2&quot; &quot;4&quot; &quot;2&quot; NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; NA 
+##  [649] NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  &quot;4&quot; &quot;1&quot; &quot;4&quot; &quot;5&quot; &quot;4&quot; NA 
+##  [667] NA  NA  NA  NA  NA  NA  &quot;2&quot; &quot;2&quot; NA  &quot;4&quot; &quot;4&quot; &quot;5&quot; &quot;2&quot; NA  NA  NA  &quot;2&quot; &quot;2&quot;
+##  [685] &quot;4&quot; NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;4&quot; NA  NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot;
+##  [703] NA  NA  &quot;4&quot; &quot;5&quot; NA  &quot;1&quot; NA  NA  &quot;5&quot; NA  &quot;1&quot; &quot;4&quot; &quot;1&quot; &quot;4&quot; &quot;5&quot; &quot;4&quot; &quot;1&quot; &quot;4&quot;
+##  [721] &quot;5&quot; NA  &quot;1&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;4&quot; &quot;5&quot; NA  &quot;1&quot; &quot;2&quot;
+##  [739] &quot;3&quot; &quot;4&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  &quot;4&quot; &quot;5&quot; NA  &quot;1&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot;
+##  [757] &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA 
+##  [775] NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;2&quot; &quot;3&quot; NA 
+##  [793] &quot;4&quot; NA  NA  &quot;1&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  &quot;3&quot; &quot;4&quot; NA  NA  &quot;1&quot; NA  &quot;1&quot; &quot;2&quot;
+##  [811] &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  &quot;1&quot; &quot;3&quot; NA  NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  &quot;1&quot;
+##  [829] &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;2&quot; &quot;3&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;2&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;
+##  [847] &quot;5&quot; NA  NA  NA  NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;
+##  [865] &quot;5&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  &quot;2&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA 
+##  [883] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  NA  &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA 
+##  [901] NA  NA  NA  NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  &quot;3&quot; &quot;4&quot; NA  NA  NA 
+##  [919] NA  NA  &quot;4&quot; NA  &quot;4&quot; NA  &quot;1&quot; &quot;3&quot; &quot;1&quot; &quot;3&quot; NA  NA  NA  NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot;
+##  [937] NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;4&quot; NA  NA  NA  NA  NA  &quot;1&quot; &quot;3&quot; NA  &quot;4&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot;
+##  [955] &quot;5&quot; NA  NA  NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  NA  NA  NA  &quot;2&quot; &quot;4&quot; &quot;2&quot;
+##  [973] &quot;4&quot; &quot;5&quot; NA  NA  &quot;4&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot;
+##  [991] &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  NA  NA  &quot;1&quot; &quot;2&quot;
+## [1009] &quot;4&quot; &quot;5&quot; NA  &quot;4&quot; &quot;5&quot; &quot;2&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 
+## [1027] NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 
+## [1045] NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 
+## [1063] NA  NA  NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot;
+## [1081] &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; NA  &quot;4&quot; NA  NA  &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA 
+## [1099] NA  NA  &quot;2&quot; &quot;3&quot; &quot;2&quot; NA  &quot;4&quot; &quot;1&quot; &quot;3&quot; &quot;2&quot; &quot;3&quot; NA  NA  NA  &quot;2&quot; &quot;1&quot; &quot;2&quot; &quot;1&quot;
+## [1117] &quot;3&quot; &quot;4&quot; NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  &quot;1&quot;
+## [1135] &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  &quot;2&quot; &quot;3&quot; &quot;1&quot; NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;2&quot; NA  &quot;4&quot;
+## [1153] &quot;1&quot; NA  &quot;1&quot; NA  NA  NA  &quot;1&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;
+## [1171] &quot;5&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  NA  NA  NA  &quot;2&quot; &quot;4&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;
+## [1189] &quot;5&quot; NA  NA  NA  NA  NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  &quot;5&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot;
+## [1207] NA  NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; NA  NA  &quot;4&quot; NA  &quot;4&quot; NA  NA  NA  NA  NA  NA  NA  NA 
+## [1225] NA  &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;2&quot; &quot;4&quot; NA  NA  NA  NA  NA  NA  &quot;4&quot; &quot;3&quot; &quot;4&quot; NA  &quot;3&quot; &quot;4&quot;
+## [1243] &quot;5&quot; &quot;3&quot; &quot;3&quot; NA  &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  NA  NA  NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;
+## [1261] &quot;5&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  &quot;1&quot; &quot;2&quot; &quot;4&quot; NA  NA  NA  NA  NA 
+## [1279] NA  NA  NA  NA  &quot;2&quot; &quot;2&quot; NA  &quot;4&quot; &quot;1&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;2&quot; &quot;1&quot; &quot;5&quot; NA  NA  &quot;2&quot;
+## [1297] &quot;1&quot; &quot;2&quot; &quot;4&quot; NA  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA  NA  &quot;2&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; NA 
+## [1315] NA  NA  NA  &quot;1&quot; &quot;4&quot; &quot;5&quot;</code></pre>
+<pre class="r"><code>edgelist$`tie-type`[is.na(edgelist$`tie-type`)] = 0 #NA values for tie-type to 0  
+edgelist &lt;- na.omit(edgelist)
+edgelist &lt;- edgelist %&gt;%
+  arrange(`out-tie`) %&gt;% 
+  filter(`out-tie` != `in-tie`)
+##there are 3 variables in the edge list: out-tie, in-tie, and tie.
+#creating nodelist
+inclass &lt;- subset(node, select = -c(2:41) )
+inclass &lt;- na.omit(inclass)
+absent_people &lt;- tibble (ID= c(3,4,8,9,10,11,12,13,14,16,19,21,22,25,26,27,29,37,39), trait = NA) #people who didnt take the survey 
+nodelist &lt;-rbind (inclass, absent_people) %&gt;% arrange(`ID`) #combine  people took the survey and people didn&#39;t take the survey</code></pre>
+</div>
+<div id="calculate-measures-of-centrality-and-similarity-in-networks-depending-on-the-type-of-tie-which-tie-type-generates-the-most-similar-network-in-terms-of-introversion-which-tie-type-is-the-most-dissimilar" class="section level4">
+<h4><strong>2. Calculate measures of centrality and similarity in networks depending on the type of tie? Which tie type generates the most similar network in terms of introversion? Which tie type is the most dissimilar?</strong></h4>
+<p>Looking at the information centrality, tie type 4 (I ask for advice/help) has the greatest centralization while tie type 5 (Asks me for help/advice). Betweenness is also another measure of centrality which shows us how well-connected the parts are. In terms of betweenness, tie type 3 (Is my friend ) ranks the highest and tie type 2 (I have met during my time in MBDS) is the lowest. Likewise, tie type 3 also ranks the highest for reciprocity, though tie type 4 ranks the lowest. As for closeness, tie type 2 ranks the closest and tie type 3 is the least closest.</p>
+<p>Tie type 1 (I have texted in the last 7 days) generates the most similar network in terms of introversion, while tie type 3 generates the most dissimilar.</p>
+<pre class="r"><code>classnormsnet &lt;- network(edgelist, vertex.attr = nodelist, matrix.type = &quot;edgelist&quot;, ignore.eval = FALSE)
+summary(classnormsnet)</code></pre>
+<pre><code>## Network attributes:
+##   vertices = 45
+##   directed = TRUE
+##   hyper = FALSE
+##   loops = FALSE
+##   multiple = FALSE
+##   bipartite = FALSE
+##  total edges = 1246 
+##    missing edges = 0 
+##    non-missing edges = 1246 
+##  density = 0.6292929 
+## 
+## Vertex attributes:
+## 
+##  ID:
+##    numeric valued attribute
+##    attribute summary:
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    1.00    7.00   18.00   18.56   29.00   40.00 
+## 
+##  trait:
+##    numeric valued attribute
+##    attribute summary:
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##   1.000   2.000   2.000   2.042   2.000   3.000      21 
+##   vertex.names:
+##    character valued attribute
+##    45 valid vertex names
+## 
+## Edge attributes:
+## 
+##  tie-type:
+##    character valued attribute
+##    attribute summary:
+##   0   1   2   3   4   5 
+## 551 143 133 131 176 112 
+## 
+## Network adjacency matrix:
+##     1  2  5  6  7 1 10 11 12 13 14 15 16 17 18 19 2 20 21 22 23 24 25 26 27 28
+##  1  0  0  0  0  0 0  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+##  2  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 0  1  1  1  1  1  1  1  1  1
+##  5  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+##  6  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+##  7  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+## 1   0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 10  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 11  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 12  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 13  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 14  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 15  0  0  0  0  0 1  1  1  1  1  1  0  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+## 16  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 17  0  0  0  0  0 1  1  1  1  1  1  1  1  0  1  1 1  1  1  1  1  1  1  1  1  1
+## 18  0  0  0  0  0 1  1  1  1  1  1  1  1  1  0  1 1  1  1  1  1  1  1  1  1  1
+## 19  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 2   0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 20  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  0  1  1  1  1  1  1  1  1
+## 21  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 22  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 23  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  0  1  1  1  1  1
+## 24  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  0  1  1  1  1
+## 25  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 26  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 27  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 28  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  0
+## 29  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 3   0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 30  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+## 31  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+## 32  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+## 33  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+## 34  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+## 35  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+## 36  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+## 37  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 38  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+## 39  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 4   0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 40  0  0  0  0  0 1  1  1  1  1  1  1  1  1  1  1 1  1  1  1  1  1  1  1  1  1
+## 5   0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 6   0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 7   0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 8   0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+## 9   0  0  0  0  0 0  0  0  0  0  0  0  0  0  0  0 0  0  0  0  0  0  0  0  0  0
+##    29 3 30 31 32 33 34 35 36 37 38 39 4 40 5 6 7 8 9
+##  1  1 1  1  1  1  1  1  1  1  1  1  1 1  1 1 1 1 1 1
+##  2  1 1  1  1  1  1  1  1  1  1  1  1 1  1 1 1 1 1 1
+##  5  1 1  1  1  1  1  1  1  1  1  1  1 1  1 0 1 1 1 1
+##  6  1 1  1  1  1  1  1  1  1  1  1  1 1  1 1 0 1 1 1
+##  7  1 1  1  1  1  1  1  1  1  1  1  1 1  1 1 1 0 1 1
+## 1   0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 10  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 11  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 12  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 13  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 14  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 15  1 1  1  1  1  1  1  1  1  1  1  1 1  1 1 1 1 1 1
+## 16  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 17  1 1  1  1  1  1  1  1  1  1  1  1 1  1 1 1 1 1 1
+## 18  1 1  1  1  1  1  1  1  1  1  1  1 1  1 1 1 1 1 1
+## 19  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 2   0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 20  1 1  1  1  1  1  1  1  1  1  1  1 1  1 1 1 1 1 1
+## 21  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 22  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 23  1 1  1  1  1  1  1  1  1  1  1  1 1  1 1 1 1 1 1
+## 24  1 1  1  1  1  1  1  1  1  1  1  1 1  1 1 1 1 1 1
+## 25  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 26  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 27  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 28  1 1  1  1  1  1  1  1  1  1  1  1 1  1 1 1 1 1 1
+## 29  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 3   0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 30  1 1  0  1  1  1  1  1  1  1  1  1 1  1 1 1 1 1 1
+## 31  1 1  1  0  1  1  1  1  1  1  1  1 1  1 1 1 1 1 1
+## 32  1 1  1  1  0  1  1  1  1  1  1  1 1  1 1 1 1 1 1
+## 33  1 1  1  1  1  0  1  1  1  1  1  1 1  1 1 1 1 1 1
+## 34  1 1  1  1  1  1  0  1  1  1  1  1 1  1 1 1 1 1 1
+## 35  1 1  1  1  1  1  1  0  1  1  1  1 1  1 1 1 1 1 1
+## 36  1 1  1  1  1  1  1  1  0  1  1  1 1  1 1 1 1 1 1
+## 37  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 38  1 1  1  1  1  1  1  1  1  1  0  1 1  1 1 1 1 1 1
+## 39  0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 4   0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 40  1 1  1  1  1  1  1  1  1  1  1  1 1  0 1 1 1 1 1
+## 5   0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 6   0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 7   0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 8   0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0
+## 9   0 0  0  0  0  0  0  0  0  0  0  0 0  0 0 0 0 0 0</code></pre>
+<pre class="r"><code>plot(classnormsnet, vertex.cex = 1) # very dense </code></pre>
+<p><img src="homework10_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>plot(classnormsnet, vertex.cex = 3)</code></pre>
+<p><img src="homework10_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<pre class="r"><code># graphing the network
+network_class &lt;- graph_from_data_frame(d = edgelist, vertices = nodelist, directed = TRUE)
+plot(network_class, edge.arrow.size = 0.1, vertex.size = 3)</code></pre>
+<p><img src="homework10_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
+<pre class="r"><code>plot(network_class, edge.arrow.size = 0.1, vertex.size = 6)</code></pre>
+<p><img src="homework10_files/figure-html/unnamed-chunk-3-4.png" width="672" /></p>
+<p><strong>Edgelist based on Tie-Type, Nodelist based on trait</strong></p>
+<pre class="r"><code># edgelist based on tie-type, nodelist based on trait
+edgelist1 &lt;- edgelist %&gt;% filter(`tie-type` == 1)
+edgelist2 &lt;- edgelist %&gt;% filter(`tie-type` == 2)
+edgelist3 &lt;- edgelist %&gt;% filter(`tie-type` == 3)
+edgelist4 &lt;- edgelist %&gt;% filter(`tie-type` == 4)
+edgelist5 &lt;- edgelist %&gt;% filter(`tie-type` == 5)
+nodelist_introvert &lt;- nodelist %&gt;% filter(trait==1)
+nodelist_extrovert &lt;- nodelist %&gt;% filter(trait == 3)
+network_class_tietype1 &lt;- graph_from_data_frame(d = edgelist1, vertices = nodelist, directed = TRUE)
+network_class_tietype2 &lt;- graph_from_data_frame(d = edgelist2, vertices = nodelist, directed = TRUE)
+network_class_tietype3 &lt;- graph_from_data_frame(d = edgelist3, vertices = nodelist, directed = TRUE)
+network_class_tietype4 &lt;- graph_from_data_frame(d = edgelist4, vertices = nodelist, directed = TRUE)
+network_class_tietype5 &lt;- graph_from_data_frame(d = edgelist5, vertices = nodelist, directed = TRUE)</code></pre>
+<p><strong>Density</strong> Density is the number of ties relative to the number of possible ties</p>
+<p>From greatest to least, the rank of tie types in terms of density is as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>I ask for advice/help (tie type 4)</p></li>
+<li><p>I have texted in the last 7 days (tie type 1)</p></li>
+<li><p>I have met during my time in MBDS (tie type 2)</p></li>
+<li><p>Is my friend (tie type 3)</p></li>
+<li><p>Asks me for help/advice (tie type 5)</p></li>
+</ol>
+<pre class="r"><code># density based on tie type 
+edge_density(network_class_tietype1, loops = F)</code></pre>
+<pre><code>## [1] 0.09166667</code></pre>
+<pre class="r"><code>edge_density(network_class_tietype2, loops = F)</code></pre>
+<pre><code>## [1] 0.08525641</code></pre>
+<pre class="r"><code>edge_density(network_class_tietype3, loops = F)</code></pre>
+<pre><code>## [1] 0.08397436</code></pre>
+<pre class="r"><code>edge_density(network_class_tietype4, loops = F)</code></pre>
+<pre><code>## [1] 0.1128205</code></pre>
+<pre class="r"><code>edge_density(network_class_tietype5, loops = F)</code></pre>
+<pre><code>## [1] 0.07179487</code></pre>
+<p><strong>Reciprocity</strong></p>
+<p>From greatest to least, the rank of tie types in terms of reciprocity is as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>Is my friend (tie type 3)</p></li>
+<li><p>I have met during my time in MBDS (tie type 2)</p></li>
+<li><p>I have texted in the last 7 days (tie type 1)</p></li>
+<li><p>Asks me for help/advice (tie type 5)</p></li>
+<li><p>I ask for advice/help (tie type 4)</p></li>
+</ol>
+<pre class="r"><code>#reciprocity
+reciprocity(network_class_tietype1)</code></pre>
+<pre><code>## [1] 0.4895105</code></pre>
+<pre class="r"><code>reciprocity(network_class_tietype2)</code></pre>
+<pre><code>## [1] 0.5112782</code></pre>
+<pre class="r"><code>reciprocity(network_class_tietype3)</code></pre>
+<pre><code>## [1] 0.5648855</code></pre>
+<pre class="r"><code>reciprocity(network_class_tietype4)</code></pre>
+<pre><code>## [1] 0.3863636</code></pre>
+<pre class="r"><code>reciprocity(network_class_tietype5)</code></pre>
+<pre><code>## [1] 0.4821429</code></pre>
+<p><strong>Transitivity</strong></p>
+<p>From greatest to least, the rank of tie types in terms of transitivty is as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>I have met during my time in MBDS (tie type 2)</p></li>
+<li><p>Is my friend (tie type 3)</p></li>
+<li><p>I ask for advice/help (tie type 4)</p></li>
+<li><p>I have texted in the last 7 days (tie type 1)</p></li>
+<li><p>Asks me for help/advice (tie type 5)</p></li>
+</ol>
+<pre class="r"><code># transitivity
+transitivity(network_class_tietype1, type=&quot;global&quot;)</code></pre>
+<pre><code>## [1] 0.3579088</code></pre>
+<pre class="r"><code>transitivity(network_class_tietype2, type=&quot;global&quot;)</code></pre>
+<pre><code>## [1] 0.4365427</code></pre>
+<pre class="r"><code>transitivity(network_class_tietype3, type=&quot;global&quot;)</code></pre>
+<pre><code>## [1] 0.4279835</code></pre>
+<pre class="r"><code>transitivity(network_class_tietype4, type=&quot;global&quot;)</code></pre>
+<pre><code>## [1] 0.4114404</code></pre>
+<pre class="r"><code>transitivity(network_class_tietype5, type=&quot;global&quot;)</code></pre>
+<pre><code>## [1] 0.3059034</code></pre>
+<p><strong>Diameter</strong></p>
+<p>The following tie types have a diameter of 5:</p>
+<ol style="list-style-type: decimal">
+<li><p>I have texted in the last 7 days (tie type 1)</p></li>
+<li><p>I have met during my time in MBDS (tie type 2)</p></li>
+<li><p>Is my friend (tie type 3)</p></li>
+</ol>
+<p>The following tie types have a diameter of 4:</p>
+<ol start="4" style="list-style-type: decimal">
+<li><p>I ask for advice/help (tie type 4)</p></li>
+<li><p>Asks me for help/advice (tie type 5)</p></li>
+</ol>
+<pre class="r"><code># Diameter
+diameter(network_class_tietype1, directed=F, weights=NA)</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>diameter(network_class_tietype2, directed=F, weights=NA)</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>diameter(network_class_tietype3, directed=F, weights=NA)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>diameter(network_class_tietype4, directed=F, weights=NA)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>diameter(network_class_tietype5, directed=F, weights=NA)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<p><strong>Closeness</strong></p>
+<p>Closeness measures how close people are to everyone else</p>
+<p>From closest to least close, the rank of tie types is as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>I have met during my time in MBDS (tie type 2)</p></li>
+<li><p>I ask for advice/help (tie type 4)</p></li>
+<li><p>I have texted in the last 7 days (tie type 1)</p></li>
+<li><p>Asks me for help/advice (tie type 5)</p></li>
+<li><p>Is my friend (tie type 3)</p></li>
+</ol>
+<pre class="r"><code>#calculating closeness
+mean(closeness(network_class_tietype1, mode=&quot;all&quot;, weights=NA))</code></pre>
+<pre><code>## Warning in closeness(network_class_tietype1, mode = &quot;all&quot;, weights = NA): At
+## centrality.c:2784 :closeness centrality is not well-defined for disconnected
+## graphs</code></pre>
+<pre><code>## [1] 0.003790316</code></pre>
+<pre class="r"><code>mean(closeness(network_class_tietype2, mode=&quot;all&quot;, weights=NA))</code></pre>
+<pre><code>## Warning in closeness(network_class_tietype2, mode = &quot;all&quot;, weights = NA): At
+## centrality.c:2784 :closeness centrality is not well-defined for disconnected
+## graphs</code></pre>
+<pre><code>## [1] 0.004634212</code></pre>
+<pre class="r"><code>mean(closeness(network_class_tietype3, mode=&quot;all&quot;, weights=NA))</code></pre>
+<pre><code>## Warning in closeness(network_class_tietype3, mode = &quot;all&quot;, weights = NA): At
+## centrality.c:2784 :closeness centrality is not well-defined for disconnected
+## graphs</code></pre>
+<pre><code>## [1] 0.001634019</code></pre>
+<pre class="r"><code>mean(closeness(network_class_tietype4, mode=&quot;all&quot;, weights=NA))</code></pre>
+<pre><code>## Warning in closeness(network_class_tietype4, mode = &quot;all&quot;, weights = NA): At
+## centrality.c:2784 :closeness centrality is not well-defined for disconnected
+## graphs</code></pre>
+<pre><code>## [1] 0.003956749</code></pre>
+<pre class="r"><code>mean(closeness(network_class_tietype5, mode=&quot;all&quot;, weights=NA))</code></pre>
+<pre><code>## Warning in closeness(network_class_tietype5, mode = &quot;all&quot;, weights = NA): At
+## centrality.c:2784 :closeness centrality is not well-defined for disconnected
+## graphs</code></pre>
+<pre><code>## [1] 0.002451302</code></pre>
+<p><strong>Betweenness</strong></p>
+<p>Betweenness is the shortest paths between nodes that go through a given node</p>
+<p>From most betweenness to least betweenness, the rank of ties in terms of betweenness is as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>Is my friend (tie type 3)</p></li>
+<li><p>I ask for advice/help (tie type 4)</p></li>
+<li><p>Asks me for help/advice (tie type 5)</p></li>
+<li><p>I have texted in the last 7 days (tie type 1)</p></li>
+<li><p>I have met during my time in MBDS (tie type 2)</p></li>
+</ol>
+<pre class="r"><code>mean(betweenness(network_class_tietype1, directed=F, weights=NA))</code></pre>
+<pre><code>## [1] 21.475</code></pre>
+<pre class="r"><code>mean(betweenness(network_class_tietype2, directed=F, weights=NA))</code></pre>
+<pre><code>## [1] 21.725</code></pre>
+<pre class="r"><code>mean(betweenness(network_class_tietype3, directed=F, weights=NA))</code></pre>
+<pre><code>## [1] 10.825</code></pre>
+<pre class="r"><code>mean(betweenness(network_class_tietype4, directed=F, weights=NA))</code></pre>
+<pre><code>## [1] 16.625</code></pre>
+<pre class="r"><code>mean(betweenness(network_class_tietype5, directed=F, weights=NA))</code></pre>
+<pre><code>## [1] 16.975</code></pre>
+<p><strong>Degree</strong></p>
+<p>Degree looks at the number of ties in a network</p>
+<p>From greatest to least, the rank of tie types in terms of degree is as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>I ask for advice/help (tie type 4)</p></li>
+<li><p>I have texted in the last 7 days (tie type 1)</p></li>
+<li><p>I have met during my time in MBDS (tie type 2)</p></li>
+<li><p>Is my friend (tie type 3)</p></li>
+<li><p>Asks me for help/advice (tie type 5)</p></li>
+</ol>
+<pre class="r"><code>mean(degree(network_class_tietype1, mode=&quot;all&quot;))</code></pre>
+<pre><code>## [1] 7.15</code></pre>
+<pre class="r"><code>mean(degree(network_class_tietype2, mode=&quot;all&quot;))</code></pre>
+<pre><code>## [1] 6.65</code></pre>
+<pre class="r"><code>mean(degree(network_class_tietype3, mode=&quot;all&quot;))</code></pre>
+<pre><code>## [1] 6.55</code></pre>
+<pre class="r"><code>mean(degree(network_class_tietype4, mode=&quot;all&quot;))</code></pre>
+<pre><code>## [1] 8.8</code></pre>
+<pre class="r"><code>mean(degree(network_class_tietype5, mode=&quot;all&quot;))</code></pre>
+<pre><code>## [1] 5.6</code></pre>
+<p><strong>Centrality Degree</strong></p>
+<p>Information Centrality is the number of all paths between nodes that go through a given node</p>
+<p>From greatest centralization to least centralization, the rank of tie types is as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>I ask for advice/help (tie type 4)</p></li>
+<li><p>I have met during my time in MBDS (tie type 2)</p></li>
+<li><p>Is my friend (tie type 3)</p></li>
+<li><p>I have texted in the last 7 days (tie type 1)</p></li>
+<li><p>Asks me for help/advice (tie type 5)</p></li>
+</ol>
+<pre class="r"><code>centr_degree(network_class_tietype1, mode=&quot;in&quot;, normalized=T)</code></pre>
+<pre><code>## $res
+##  [1] 2 6 3 2 8 7 0 3 5 0 4 6 4 1 4 2 0 9 6 4 1 8 1 2 1 1 3 9 7 4 5 2 3 5 5 4 1 2
+## [39] 1 2
+## 
+## $centralization
+## [1] 0.1391026
+## 
+## $theoretical_max
+## [1] 1560</code></pre>
+<pre class="r"><code>centr_degree(network_class_tietype2, mode=&quot;in&quot;, normalized=T)</code></pre>
+<pre><code>## $res
+##  [1]  1 10  1  2  7 10  0  4  2  1  0  0  1  1  2  1  1 11  9  2  4  2  4  1  1
+## [26]  2  6 10  3  2  8  2  1  7  7  4  1  1  0  1
+## 
+## $centralization
+## [1] 0.1967949
+## 
+## $theoretical_max
+## [1] 1560</code></pre>
+<pre class="r"><code>centr_degree(network_class_tietype3, mode=&quot;in&quot;, normalized=T)</code></pre>
+<pre><code>## $res
+##  [1] 1 9 0 2 8 8 0 2 0 0 0 6 2 1 4 1 0 9 4 6 2 7 3 1 0 0 4 6 8 4 7 4 3 6 4 6 0 2
+## [39] 0 1
+## 
+## $centralization
+## [1] 0.1467949
+## 
+## $theoretical_max
+## [1] 1560</code></pre>
+<pre class="r"><code>centr_degree(network_class_tietype4, mode=&quot;in&quot;, normalized=T)</code></pre>
+<pre><code>## $res
+##  [1]  1  9  1  2  8  8  1 15  3  9  1  4  3  1  2  0  0  9  5  6 12  6  1  1  1
+## [26]  2  2 10 16  4  6  3  3  5  4  8  0  2  0  2
+## 
+## $centralization
+## [1] 0.2974359
+## 
+## $theoretical_max
+## [1] 1560</code></pre>
+<pre class="r"><code>centr_degree(network_class_tietype5, mode=&quot;in&quot;, normalized=T)</code></pre>
+<pre><code>## $res
+##  [1] 4 2 1 2 7 8 0 0 4 0 1 2 2 1 1 0 0 8 4 5 1 7 1 2 0 3 1 8 3 4 6 2 3 5 5 5 0 2
+## [39] 0 2
+## 
+## $centralization
+## [1] 0.1333333
+## 
+## $theoretical_max
+## [1] 1560</code></pre>
+<p><strong>Mean Distance</strong></p>
+<p>The mean distance between nodes, in order from least to greatest, is as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>Is my friend (tie type 3)</p></li>
+<li><p>I ask for advice/help (tie type 4)</p></li>
+<li><p>I have met during my time in MBDS (tie type 2)</p></li>
+<li><p>I have texted in the last 7 days (tie type 1)</p></li>
+<li><p>Asks me for help/advice (tie type 5)</p></li>
+</ol>
+<pre class="r"><code>mean_distance(network_class_tietype1, directed=T)</code></pre>
+<pre><code>## [1] 2.226804</code></pre>
+<pre class="r"><code>mean_distance(network_class_tietype2, directed=T)</code></pre>
+<pre><code>## [1] 2.207792</code></pre>
+<pre class="r"><code>mean_distance(network_class_tietype3, directed=T)</code></pre>
+<pre><code>## [1] 2.039301</code></pre>
+<pre class="r"><code>mean_distance(network_class_tietype4, directed=T)</code></pre>
+<pre><code>## [1] 2.1406</code></pre>
+<pre class="r"><code>mean_distance(network_class_tietype5, directed=T)</code></pre>
+<pre><code>## [1] 2.231855</code></pre>
+</div>
+<div id="which-tie-type-generates-the-most-similar-network-in-terms-of-introversion-which-tie-type-is-the-most-dissimilar" class="section level4">
+<h4><strong>Which tie type generates the most similar network in terms of introversion? Which tie type is the most dissimilar?</strong></h4>
+<p><strong>Most similar network:</strong> “I have texted in the last 7 days”</p>
+<p><strong>Most dissimilar network:</strong> “Is my friend”</p>
+<pre class="r"><code>node &lt;- nodelist
+node[is.na(node)] &lt;- -1
+net &lt;- graph_from_data_frame(d = edgelist, vertices = node, directed = TRUE)
+net1 &lt;- graph_from_data_frame(d = edgelist1, vertices = node, directed = TRUE)
+net2 &lt;- graph_from_data_frame(d = edgelist2, vertices = node, directed = TRUE)
+net3 &lt;- graph_from_data_frame(d = edgelist3, vertices = node, directed = TRUE)
+net4 &lt;- graph_from_data_frame(d = edgelist4, vertices = node, directed = TRUE)
+net5 &lt;- graph_from_data_frame(d = edgelist5, vertices = node, directed = TRUE)
+#filter edgelist for all 5 tie types...then calculate this measure for 5 networks and see which is most similar / dissimialr 
+#Similarity
+assortativity(net1, V(net1)$trait, directed=T)</code></pre>
+<pre><code>## [1] 0.1235727</code></pre>
+<pre class="r"><code>assortativity(net2, V(net2)$trait, directed=T)</code></pre>
+<pre><code>## [1] -0.03062123</code></pre>
+<pre class="r"><code>assortativity(net3, V(net3)$trait, directed=T)</code></pre>
+<pre><code>## [1] -0.04311202</code></pre>
+<pre class="r"><code>assortativity(net4, V(net4)$trait, directed=T)</code></pre>
+<pre><code>## [1] 0.003559696</code></pre>
+<pre class="r"><code>assortativity(net5, V(net5)$trait, directed=T)</code></pre>
+<pre><code>## [1] 0.06082053</code></pre>
+</div>
+<div id="do-introverts-tend-to-be-at-the-periphery-while-extraverts-are-in-the-center-of-the-network-motivate." class="section level4">
+<h4><strong>3. Do introverts tend to be at the periphery while extraverts are in the center of the network? Motivate.</strong></h4>
+<p>We use both decision tree and regression to examine if introverts tend to be at the periphery while extraverts are in the center of the network. The input is the trait (level of introvert/extravert) and the output is the degree/betweenness.</p>
+<p>Both the decision tree models are unable to predict any patterns. The regression model also does not show any significances. The small sample size is our limitation. We come to conclude that trait (introvert/extravert) does not predict where introverts andextraverts are in the network.</p>
+<pre class="r"><code>library(rpart)
+library(rpart.plot)
+library(caret)</code></pre>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre><code>## 
+## Attaching package: &#39;caret&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     lift</code></pre>
+<pre class="r"><code>#decision tree: betweenness and trait
+tree_bt &lt;- nodelist %&gt;% mutate (between = betweenness(network_class, directed=F, weights=NA))
+model_tree_bt &lt;- rpart(between ~ as.factor(trait), method = &quot;anova&quot;, data = tree_bt, cp = 0.00001) 
+rpart.plot(model_tree_bt)</code></pre>
+<p><img src="homework10_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<pre class="r"><code>#decision tree: degree and trait
+tree_dg &lt;- nodelist %&gt;% mutate (degree = degree(network_class, mode=&quot;in&quot;))
+model_tree_dg &lt;- rpart(degree ~ as.factor(trait), method = &quot;anova&quot;, data = tree_dg, cp = 0.00001) 
+rpart.plot(model_tree_dg)</code></pre>
+<p><img src="homework10_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
+<pre class="r"><code>#regression: bewteenness and trait
+summary(lm(between ~ as.factor(trait), data = tree_bt))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = between ~ as.factor(trait), data = tree_bt)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.1672 -2.8235 -0.7542  1.6553  7.4106 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         9.5566     1.9448   4.914 0.000112 ***
+## as.factor(trait)2  -1.8153     2.1304  -0.852 0.405359    
+## as.factor(trait)3  -0.8197     2.7504  -0.298 0.769085    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.369 on 18 degrees of freedom
+##   (19 observations deleted due to missingness)
+## Multiple R-squared:  0.04433,    Adjusted R-squared:  -0.06186 
+## F-statistic: 0.4175 on 2 and 18 DF,  p-value: 0.6649</code></pre>
+<p><strong>Contribution: Ammar Plumber, Elaina Lin,Ryan Karbowicz, and Meghan Aines</strong></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
