@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 # I. Introduction
 
 Social media has been evolved and affected our lives in many aspects. In this assignment, we aim to have a closer look at the two most popular social media platforms: Tiktok and Facebook. These platforms are in a similar industry but with very different target audiences, thus the two brands and their audiences could differ in their communication styles and language. Understanding the language used in these platforms may lead to their business implications and directions. 
@@ -18,11 +19,11 @@ Our research question focuses on whether there are differences in sentiments of 
 
 Our method of sentiments analysis is text mining with R. 
 
-First, after getting tweets from twitter, we use basic tools of data exploration to transform, visualize, and examine different features of the datasets, such as source, time, length, and content (e.g, link and picture) of the tweets. We produce bar charts to visualize the most popular words used by each twitter account, as well as the most popular sentiments associated with tweets that each account produces. A wordcloud also helps paint a clearer picture of each company's most commonly used words.
+* First, after getting tweets from twitter, we use basic tools of data exploration to transform, visualize, and examine different features of the datasets, such as source, time, length, and content (e.g, link and picture) of the tweets. We produce bar charts to visualize the most popular words used by each twitter account, as well as the most popular sentiments associated with tweets that each account produces. A wordcloud also helps paint a clearer picture of each company's most commonly used words.
 
-Second, we transform the datasets into tidy text format for sentiment analysis. The two main lexicons that we use are nrc and affin.  
+* Second, we transform the datasets into tidy text format for sentiment analysis. The two main lexicons that we use are nrc and affin.  
 
-Finally, we run 4 different models to predict if a tweet was posted by either Facebook or Tiktok. The inputs of these models are the length of the tweet, as well as sentiment (which includes anger, anticipation, disgust, negative, postive, trust, joy, surprise, fear and sadness).  
+* Finally, we run 4 different models to predict if a tweet was posted by either Facebook or Tiktok. The inputs of these models are the length of the tweet, as well as sentiment (which includes anger, anticipation, disgust, negative, postive, trust, joy, surprise, fear and sadness).  
 
 The first model is a Simple Decision Tree, the second model is a Bagging Model, the third model is a Random Forest and the fourth model is a Gradient Boosting Model.
 
@@ -225,7 +226,9 @@ tiktok_sentiment <-
             group_by(sentiment) 
 fb_words %>% head()
 ```
+
 **Facebook vs. Tiktok sentiment**
+
 ```{r}
 fb_sentiment_analysis <- fb_sentiment %>% 
   count(word, sentiment) %>% 
