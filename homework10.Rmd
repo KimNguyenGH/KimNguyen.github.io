@@ -362,4 +362,6 @@ summary(lm(between ~ as.factor(trait), data = tree_bt))
 ```
 
 
-**Contribution: Ammar Plumber, Elaina Lin,Ryan Karbowicz, and Meghan Aines**
+**Contribution:**
+Kim was in charge for Q1, Ryan and Ammar worked on Q3, Elaina and Mehgan assisted on Q4. 
+
