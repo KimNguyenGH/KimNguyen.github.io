@@ -1,6 +1,6 @@
 ---
-title: "Homework 10 - Network Analysis"
-author: "Kim Nguyen"
+title: "Homework 10 - Alligators"
+author: "Ammar Plumber, Elaina Lin, Kim Nguyen, Meghan Aines, and Ryan Karbowicz"
 date: "4/27/2021"
 output: html_document
 ---
@@ -9,8 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+In this analysis, we looked at the network of the cohort of people in BDS 516: Data Science and Quantitative Modeling, a graduate course taught by Alex Shpenev at the University of Pennsylvania. The data that we use in this analysis were obtained from the survey that students in BDS516 took.
 
-In this analysis, we looked at the network of the cohort of people in  _BDS 516: Data Science and Quantitative Modeling_, a graduate course taught by Alex Shpenev at the University of Pennsylvania. The data that we use in this analysis were obtained from the survey that students in BDS516 took.
 
 
 ```{r}
@@ -25,15 +25,34 @@ colnames(node) <- c("ID", 1:40, "trait")
 
 ```
 
+The options for each name are the following:
 
-#### **1. Prepare the data for the network analysis (create a separate edge and node list)**
+1. I have texted in the last 7 days
+
+2. I have met during my time in MBDS
+
+3. Is my friend
+
+4. I ask for advice/help
+
+5. Asks me for help/advice
+
+Options for the introversion question:
+
+1. Introverted
+
+2. Middle ground
+
+3. Extraverted
+
+##1. Prepare the data for the network analysis (create a separate edge and node list)
 
 ```{r}
 #create the edge list
 edge_prep <- node %>% pivot_longer(col = -c(ID, trait), names_to = "in-tie", values_to = "value") %>% 
   rename (`out-tie` = ID) 
   
-edgelist <- separate_rows(edge_prep, value, sep =",") %>% select(!trait) %>% 
+edgelist <- separate_rows(edge_prep, value, sep =",") %>% 
   rename (`tie-type` = value)
 as.character(edgelist$`tie-type`)
 edgelist$`tie-type`[is.na(edgelist$`tie-type`)] = 0 #NA values for tie-type to 0  
@@ -49,7 +68,7 @@ absent_people <- tibble (ID= c(3,4,8,9,10,11,12,13,14,16,19,21,22,25,26,27,29,37
 nodelist <-rbind (inclass, absent_people) %>% arrange(`ID`) #combine  people took the survey and people didn't take the survey
 ```
 
-#### **2. Calculate measures of centrality and similarity in networks depending on the type of tie? Which tie type generates the most similar network in terms of introversion? Which tie type is the most dissimilar?**
+##2. Calculate measures of centrality and similarity in networks depending on the type of tie? Which tie type generates the most similar network in terms of introversion? Which tie type is the most dissimilar?
 
 Looking at the information centrality, tie type 4 (I ask for advice/help) has the greatest centralization while tie type 5 (Asks me for help/advice). Betweenness is also another measure of centrality which shows us how well-connected the parts are. In terms of betweenness, tie type 3 (Is my friend ) ranks the highest and tie type 2 (I have met during my time in MBDS) is the lowest.  Likewise, tie type 3 also ranks the highest for reciprocity, though tie type 4 ranks the lowest. As for closeness, tie type 2 ranks the closest and tie type 3 is the least closest.
 
@@ -59,7 +78,7 @@ Tie type 1 (I have texted in the last 7 days) generates the most similar network
 classnormsnet <- network(edgelist, vertex.attr = nodelist, matrix.type = "edgelist", ignore.eval = FALSE)
 summary(classnormsnet)
 plot(classnormsnet, vertex.cex = 1) # very dense 
-plot(classnormsnet, vertex.cex = 3) #bigger dots
+plot(classnormsnet, vertex.cex = 3)
 # graphing the network
 network_class <- graph_from_data_frame(d = edgelist, vertices = nodelist, directed = TRUE)
 plot(network_class, edge.arrow.size = 0.1, vertex.size = 3)
@@ -311,7 +330,9 @@ mean_distance(network_class_tietype5, directed=T)
 
 
 
-#### **Which tie type generates the most similar network in terms of introversion? Which tie type is the most dissimilar?**
+## Which tie type generates the most similar network in terms of introversion? Which tie type is the most dissimilar?
+
+In terms of introversion:
 
 **Most similar network:** "I have texted in the last 7 days"  
 
@@ -335,7 +356,7 @@ assortativity(net4, V(net4)$trait, directed=T)
 assortativity(net5, V(net5)$trait, directed=T)
 ```
 
-#### **3. Do introverts tend to be at the periphery while extraverts are in the center of the network? Motivate.**
+##3 Do introverts tend to be at the periphery while extraverts are in the center of the network? Motivate.
 
 We use both decision tree and regression to examine if introverts tend to be at the periphery while extraverts are in the center of the network. The input is the trait (level of introvert/extravert) and the output is the degree/betweenness. 
 
@@ -363,5 +384,5 @@ summary(lm(between ~ as.factor(trait), data = tree_bt))
 
 
 **Contribution:**
-Kim was in charge for Q1, Ryan and Ammar worked on Q3, Elaina and Mehgan assisted on Q4. 
+Kim worked on Q1, Ryan and Ammar worked on Q2, and Elaina and Meghan worked on Q3.
 
