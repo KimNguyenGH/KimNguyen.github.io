@@ -22,7 +22,7 @@ library(tidyverse)
 hw10<- read_excel("hw10.xlsx")
 node<- read_excel("hw10.xlsx", skip = 1)
 colnames(node) <- c("ID", 1:40, "trait") 
-# Does node have a correct format. I'm not sure how it suppose to be
+
 ```
 
 
@@ -59,7 +59,7 @@ Tie type 1 (I have texted in the last 7 days) generates the most similar network
 classnormsnet <- network(edgelist, vertex.attr = nodelist, matrix.type = "edgelist", ignore.eval = FALSE)
 summary(classnormsnet)
 plot(classnormsnet, vertex.cex = 1) # very dense 
-plot(classnormsnet, vertex.cex = 3)
+plot(classnormsnet, vertex.cex = 3) #bigger dots
 # graphing the network
 network_class <- graph_from_data_frame(d = edgelist, vertices = nodelist, directed = TRUE)
 plot(network_class, edge.arrow.size = 0.1, vertex.size = 3)
