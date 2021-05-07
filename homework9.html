@@ -325,14 +325,14 @@ facebook &lt;-
 get_sentiments(&quot;nrc&quot;) -&gt; nrc
 facebook %&gt;% head()</code></pre>
 <pre><code>## # A tibble: 6 x 4
-##   status_id        source       text                                                                                   created_at         
-##   &lt;chr&gt;            &lt;chr&gt;        &lt;chr&gt;                                                                                  &lt;dttm&gt;             
-## 1 x13820200803434… Twitter Web… &quot;Ramadan Mubarak &lt;U+0001F319&gt;\n \nThis #MonthofGood, check out all the ways you can s… 2021-04-13 17:17:18
-## 2 x13817344290186… Khoros CX    &quot;@MeenalK1 Hi Meenal. Do you have the reference numbers for your submitted queries, p… 2021-04-12 22:22:13
-## 3 x13817333826320… Khoros CX    &quot;@Afrojalipro Thanks for updating us, Afroj! We&#39;re so happy to hear that. Have a wond… 2021-04-12 22:18:04
-## 4 x13817326683881… Khoros CX    &quot;@CallandManning Hi Calland. If you do not have access to the phone number or email a… 2021-04-12 22:15:14
-## 5 x13817113768763… Khoros CX    &quot;@BHARTINANDAN4 Hello! Please visit this Help Center article if you are having issues… 2021-04-12 20:50:37
-## 6 x13817105484761… Khoros CX    &quot;@weathermatt22 Hi Matt. Please visit our Help Center to report an issue with verifyi… 2021-04-12 20:47:20</code></pre>
+##   status_id      source    text                              created_at         
+##   &lt;chr&gt;          &lt;chr&gt;     &lt;chr&gt;                             &lt;dttm&gt;             
+## 1 x138202008034… Twitter … &quot;Ramadan Mubarak &lt;U+0001F319&gt;\n … 2021-04-13 17:17:18
+## 2 x138173442901… Khoros CX &quot;@MeenalK1 Hi Meenal. Do you hav… 2021-04-12 22:22:13
+## 3 x138173338263… Khoros CX &quot;@Afrojalipro Thanks for updatin… 2021-04-12 22:18:04
+## 4 x138173266838… Khoros CX &quot;@CallandManning Hi Calland. If … 2021-04-12 22:15:14
+## 5 x138171137687… Khoros CX &quot;@BHARTINANDAN4 Hello! Please vi… 2021-04-12 20:50:37
+## 6 x138171054847… Khoros CX &quot;@weathermatt22 Hi Matt. Please … 2021-04-12 20:47:20</code></pre>
 <p>Each dataset has around 3200 tweets.</p>
 <p><strong>Content comparison: tweeting time</strong></p>
 <pre class="r"><code>facebook %&gt;%
@@ -629,8 +629,12 @@ index &lt;-
 for_decisiontree &lt;-
   both_users %&gt;% select(-1,-2,-3,-4) %&gt;% 
   drop_na()
-train &lt;- for_decisiontree[index, ]
-test  &lt;- for_decisiontree[-index, ]
+train &lt;- for_decisiontree[index, ]</code></pre>
+<pre><code>## Warning: The `i` argument of ``[`()` can&#39;t be a matrix as of tibble 3.0.0.
+## Convert to a vector.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
+<pre class="r"><code>test  &lt;- for_decisiontree[-index, ]
 set.seed(123)
 simple_model &lt;- rpart(user ~ ., 
                       data = train, method = &quot;class&quot;)
