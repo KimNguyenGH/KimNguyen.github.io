@@ -299,7 +299,7 @@ colnames(node) &lt;- c(&quot;ID&quot;, 1:40, &quot;trait&quot;) </code></pre>
 <li><p>Middle ground</p></li>
 <li><p>Extraverted</p></li>
 </ol>
-<p>##1. Prepare the data for the network analysis (create a separate edge and node list)</p>
+<p>##<strong>1. Prepare the data for the network analysis (create a separate edge and node list)</strong></p>
 <pre class="r"><code>#create the edge list
 edge_prep &lt;- node %&gt;% pivot_longer(col = -c(ID, trait), names_to = &quot;in-tie&quot;, values_to = &quot;value&quot;) %&gt;% 
   rename (`out-tie` = ID) 
@@ -692,8 +692,7 @@ mean(closeness(network_class_tietype1, mode=&quot;all&quot;, weights=NA))</code>
 <pre class="r"><code>mean_distance(network_class_tietype5, directed=T)</code></pre>
 <pre><code>## [1] 1.392857</code></pre>
 <div id="which-tie-type-generates-the-most-similar-network-in-terms-of-introversion-which-tie-type-is-the-most-dissimilar" class="section level2">
-<h2>Which tie type generates the most similar network in terms of introversion? Which tie type is the most dissimilar?</h2>
-<p>In terms of introversion:</p>
+<h2><strong>Which tie type generates the most similar network in terms of introversion? Which tie type is the most dissimilar?</strong></h2>
 <p><strong>Most similar network:</strong> “I have texted in the last 7 days”</p>
 <p><strong>Most dissimilar network:</strong> “Is my friend”</p>
 <pre class="r"><code>node &lt;- nodelist
@@ -716,7 +715,7 @@ assortativity(net1, V(net1)$trait, directed=T)</code></pre>
 <pre><code>## [1] -0.6198843</code></pre>
 <pre class="r"><code>assortativity(net5, V(net5)$trait, directed=T)</code></pre>
 <pre><code>## [1] -0.6045513</code></pre>
-<p>##3 Do introverts tend to be at the periphery while extraverts are in the center of the network? Motivate.</p>
+<p>##<strong>3 Do introverts tend to be at the periphery while extraverts are in the center of the network? Motivate.</strong></p>
 <p>We use both decision tree and regression to examine if introverts tend to be at the periphery while extraverts are in the center of the network. The input is the trait (level of introvert/extravert) and the output is the degree/betweenness.</p>
 <p>Both the decision tree models are unable to predict any patterns. The regression model also does not show any significances. The small sample size is our limitation. We come to conclude that trait (introvert/extravert) does not predict where introverts andextraverts are in the network.</p>
 <pre class="r"><code>library(rpart)
